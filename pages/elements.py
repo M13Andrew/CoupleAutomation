@@ -9,17 +9,12 @@ class ElementsPage:
         def __init__(self, page: Page):
             self.page = page
 
-        def fill_text_box(self):
-            personal_info = next(generated_person())
-            name = personal_info.full_name
-            email = personal_info.email
-            current = personal_info.current_address
-            permanent = personal_info.permanent_address
+        def fill_text_box(self, name, email, current, permanent):
             self.page.get_by_placeholder("Full Name").fill(name)
             self.page.get_by_placeholder("name@example.com").fill(email)
             self.page.get_by_placeholder("Current Address").fill(current)
             self.page.locator("#permanentAddress").fill(permanent)
-            return name, email, current + ' ', permanent
+            # return name, email, current + ' ', permanent
 
         def click_submit_button(self):
             self.page.get_by_role("button", name="Submit").click()
