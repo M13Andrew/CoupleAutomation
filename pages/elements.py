@@ -14,7 +14,6 @@ class ElementsPage:
             self.page.get_by_placeholder("name@example.com").fill(email)
             self.page.get_by_placeholder("Current Address").fill(current)
             self.page.locator("#permanentAddress").fill(permanent)
-            # return name, email, current + ' ', permanent
 
         def click_submit_button(self):
             self.page.get_by_role("button", name="Submit").click()
@@ -25,3 +24,10 @@ class ElementsPage:
             current = self.page.query_selector("p[id='currentAddress']").text_content()
             permanent = self.page.query_selector("p[id='permanentAddress']").text_content()
             return name.split(':')[1], email.split(':')[1], current.split(':')[1], permanent.split(':')[1]
+
+        def error_checking(self):
+            error = self.page.query_selector("input[class='mr-sm-2 field-error form-control']")
+            if error.is_visible():
+                return True
+            else:
+                return False
