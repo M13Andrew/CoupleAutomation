@@ -26,8 +26,8 @@ class ElementsPage:
             return name.split(':')[1], email.split(':')[1], current.split(':')[1], permanent.split(':')[1]
 
         def error_checking(self):
-            error = self.page.query_selector("input[class='mr-sm-2 field-error form-control']")
-            if error.is_visible():
+            error = self.page.locator("input[class='mr-sm-2 field-error form-control']").count()
+            if error > 0:
                 return True
             else:
                 return False
