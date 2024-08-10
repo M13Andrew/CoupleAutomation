@@ -1,13 +1,10 @@
-from playwright.sync_api import Page
 from generator.generator import generated_person
+from pages.base_page import BasePage
 
 
 class ElementsPage:
 
-    class TextBoxPage:
-
-        def __init__(self, page: Page):
-            self.page = page
+    class TextBoxPage(BasePage):
 
         def fill_text_box(self, name, email, current, permanent):
             self.page.get_by_placeholder("Full Name").fill(name)
