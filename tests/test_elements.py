@@ -34,3 +34,14 @@ class TestElementsPage:
             test_text_box_page.click_submit_button()
             error = test_text_box_page.error_checking()
             assert error == True
+
+    class TestCheckBoxPage:
+
+        def test_check_box(self, page):
+            page.goto('https://demoqa.com/checkbox')
+            check_box_page = ElementsPage.CheckBox(page)
+            check_box_page.click_expand_all_button()
+            check_box_page.click_random_checkbox()
+            input_check_box = check_box_page.get_checked_checkboxes()
+            output_result = check_box_page.get_output_result()
+            assert input_check_box == output_result
