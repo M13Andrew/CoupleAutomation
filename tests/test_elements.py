@@ -136,3 +136,4 @@ class TestElementsPage:
             buttons_page.dynamic_click()
             result = buttons_page.dynamic_click_result()
             assert result
+a

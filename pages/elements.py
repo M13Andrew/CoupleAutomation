@@ -147,3 +147,4 @@ class ElementsPage:
         def dynamic_click_result(self):
             result = self.page.get_by_text("You have done a dynamic click").inner_text()
             return result
+a
