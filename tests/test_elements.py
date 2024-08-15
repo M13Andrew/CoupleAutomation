@@ -66,26 +66,73 @@ class TestElementsPage:
             page.goto('https://demoqa.com/radio-button')
             radio_button_page = ElementsPage.RadioButton(page)
             radio_button_page.click_radio_button('no')
+            result = radio_button_page.result_radio_button()
+            assert result == "No"
 
     class TestWebTables:
 
         def test_add_new_person(self, page):
-            personal_info = next(generated_person())
-            firstname = personal_info.firstname
-            lastname = personal_info.lastname
-            email = personal_info.email
-            age = personal_info.age
-            salary = personal_info.salary
-            department = personal_info.department
             page.goto('https://demoqa.com/webtables')
             web_tables_page = ElementsPage.WebTables(page)
             web_tables_page.add_button()
-            web_tables_page.fill_person_info(firstname, lastname, email, str(age), str(salary), department)
+            personal_info = web_tables_page.fill_person_info()
             web_tables_page.submit_button()
             result = web_tables_page.get_result()
-            assert firstname in result
-            assert lastname in result
-            assert email in result
-            assert str(age) in result
-            assert str(salary) in result
-            assert department in result
+            personal_info_list = list(personal_info)
+            assert personal_info_list == result[:len(personal_info_list)]
+
+        def test_edit_person(self, page):
+            page.goto('https://demoqa.com/webtables')
+            web_tables_page = ElementsPage.WebTables(page)
+            web_tables_page.add_button()
+            web_tables_page.fill_person_info()
+            web_tables_page.submit_button()
+            web_tables_page.edit_button()
+            personal_info = web_tables_page.fill_person_info()
+            web_tables_page.submit_button()
+            result = web_tables_page.get_result()
+            personal_info_list = list(personal_info)
+            assert personal_info_list == result[:len(personal_info_list)]
+
+        def test_delete_all_persones(self, page):
+            page.goto('https://demoqa.com/webtables')
+            web_tables_page = ElementsPage.WebTables(page)
+            web_tables_page.add_button()
+            web_tables_page.fill_person_info()
+            web_tables_page.submit_button()
+            web_tables_page.delete_button()
+            result = web_tables_page.empty_result()
+            assert result
+
+        def test_search_by(self, page):
+            page.goto('https://demoqa.com/webtables')
+            web_tables_page = ElementsPage.WebTables(page)
+            web_tables_page.add_button()
+            person = web_tables_page.fill_person_info()
+            web_tables_page.submit_button()
+            web_tables_page.search_by_name(person[0])
+            result = web_tables_page.search_result()
+            assert person[0] in result
+
+    class TestButtons:
+
+        def test_double_click(self, page):
+            page.goto('https://demoqa.com/buttons')
+            buttons_page = ElementsPage.Buttons(page)
+            buttons_page.double_click()
+            result = buttons_page.double_click_result()
+            assert result
+
+        def test_right_click(self, page):
+            page.goto('https://demoqa.com/buttons')
+            buttons_page = ElementsPage.Buttons(page)
+            buttons_page.right_click()
+            result = buttons_page.right_click_result()
+            assert result
+
+        def test_dymanic_click(self, page):
+            page.goto('https://demoqa.com/buttons')
+            buttons_page = ElementsPage.Buttons(page)
+            buttons_page.dynamic_click()
+            result = buttons_page.dynamic_click_result()
+            assert result
