@@ -1,10 +1,10 @@
 from generator.generator import generated_person
 from pages.base_page import BasePage
 import random
+import time
 
 
 class ElementsPage:
-
     class TextBoxPage(BasePage):
 
         def fill_text_box(self, name, email, current, permanent):
@@ -66,9 +66,9 @@ class ElementsPage:
 
         def click_radio_button(self, choice):
             choices = {'yes': "Yes",
-                     'impressive': "Impressive",
-                     'no': "No"
-            }
+                       'impressive': "Impressive",
+                       'no': "No"
+                       }
             self.page.get_by_text(choices[choice]).click()
 
         def result_radio_button(self):
@@ -80,18 +80,71 @@ class ElementsPage:
         def add_button(self):
             self.page.get_by_role("button", name="Add").click()
 
-        def fill_person_info(self, firstname, lastname, email, age, salary, department):
+        def fill_person_info(self):
+            personal_info = next(generated_person())
+            firstname = personal_info.firstname
+            lastname = personal_info.lastname
+            email = personal_info.email
+            age = personal_info.age
+            salary = personal_info.salary
+            department = personal_info.department
             self.page.get_by_placeholder("First Name").fill(firstname)
             self.page.get_by_placeholder("Last Name").fill(lastname)
             self.page.get_by_placeholder("name@example.com").fill(email)
-            self.page.get_by_placeholder("Age").fill(age)
-            self.page.get_by_placeholder("Salary").fill(salary)
+            self.page.get_by_placeholder("Age").fill(str(age))
+            self.page.get_by_placeholder("Salary").fill(str(salary))
             self.page.get_by_placeholder("Department").fill(department)
+            return firstname, lastname, str(age), email, str(salary)
 
         def submit_button(self):
             self.page.get_by_role("button", name="Submit").click()
 
         def get_result(self):
             rows = self.page.locator('div.rt-tr-group').element_handles()
-            row = rows[3]
-            return row.inner_text()
+            row = rows[3].inner_text()
+            return row.split()
+
+        def edit_button(self):
+            self.page.locator("#edit-record-4 path").click()
+
+        def delete_button(self):
+            while True:
+                delete_buttons_count = self.page.locator("span[title='Delete']").all()
+                if not delete_buttons_count:
+                    break
+                delete_buttons_count[0].click()
+
+        def empty_result(self):
+            result = self.page.locator('div.rt-noData').text_content()
+            return result
+
+        def search_by_name(self, search):
+            self.page.get_by_placeholder("Type to search").fill(search)
+
+        def search_result(self):
+            result = self.page.locator("div[class='rt-tr -odd']").inner_text()
+            return result
+
+    class Buttons(BasePage):
+
+        def double_click(self):
+            self.page.get_by_role("button", name="Double Click Me").dblclick()
+
+        def double_click_result(self):
+            result = self.page.get_by_text("You have done a double click").inner_text()
+            return result
+
+        def right_click(self):
+            self.page.get_by_role("button", name="Right Click Me").click(button="right")
+
+        def right_click_result(self):
+            result = self.page.get_by_text("You have done a right click").inner_text()
+            return result
+
+        def dynamic_click(self):
+            self.page.get_by_role("button", name="Click Me", exact=True).click()
+
+        def dynamic_click_result(self):
+            result = self.page.get_by_text("You have done a dynamic click").inner_text()
+            return result
+a
