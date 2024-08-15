@@ -61,3 +61,37 @@ class ElementsPage:
             for item in result_list:
                 data.append(item.inner_text())
             return str(data).replace(' ', '').lower()
+
+    class RadioButton(BasePage):
+
+        def click_radio_button(self, choice):
+            choices = {'yes': "Yes",
+                     'impressive': "Impressive",
+                     'no': "No"
+            }
+            self.page.get_by_text(choices[choice]).click()
+
+        def result_radio_button(self):
+            result = self.page.query_selector("span.text-success").text_content()
+            return result
+
+    class WebTables(BasePage):
+
+        def add_button(self):
+            self.page.get_by_role("button", name="Add").click()
+
+        def fill_person_info(self, firstname, lastname, email, age, salary, department):
+            self.page.get_by_placeholder("First Name").fill(firstname)
+            self.page.get_by_placeholder("Last Name").fill(lastname)
+            self.page.get_by_placeholder("name@example.com").fill(email)
+            self.page.get_by_placeholder("Age").fill(age)
+            self.page.get_by_placeholder("Salary").fill(salary)
+            self.page.get_by_placeholder("Department").fill(department)
+
+        def submit_button(self):
+            self.page.get_by_role("button", name="Submit").click()
+
+        def get_result(self):
+            rows = self.page.locator('div.rt-tr-group').element_handles()
+            row = rows[3]
+            return row.inner_text()
