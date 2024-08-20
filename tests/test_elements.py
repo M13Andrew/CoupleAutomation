@@ -130,10 +130,80 @@ class TestElementsPage:
             result = buttons_page.right_click_result()
             assert result
 
-        def test_dymanic_click(self, page):
+        def test_dynamic_click(self, page):
             page.goto('https://demoqa.com/buttons')
             buttons_page = ElementsPage.Buttons(page)
             buttons_page.dynamic_click()
             result = buttons_page.dynamic_click_result()
             assert result
-a
+
+    class TestLinks:
+
+        def test_home_link(self, page):
+            page.goto('https://demoqa.com/links')
+            with page.context.expect_page() as new_page_info:
+                link_button = ElementsPage.Links(page)
+                link_button.click_links_buttons('home')
+            new_page = new_page_info.value
+            new_page.wait_for_load_state('load')
+            new_url = new_page.url
+            assert new_url == 'https://demoqa.com/'
+
+        def test_home_dynamic_link(self, page):
+            page.goto('https://demoqa.com/links')
+            with page.context.expect_page() as new_page_info:
+                link_button = ElementsPage.Links(page)
+                link_button.click_links_buttons('homedynamic')
+            new_page = new_page_info.value
+            new_page.wait_for_load_state('load')
+            new_url = new_page.url
+            assert new_url == 'https://demoqa.com/'
+
+        def test_created_link(self, page):
+            page.goto('https://demoqa.com/links')
+            link_button = ElementsPage.Links(page)
+            link_button.click_links_buttons('created')
+            result = link_button.links_responded()
+            assert result == 'Link has responded with staus 201 and status text Created'
+
+        def test_no_content_link(self, page):
+            page.goto('https://demoqa.com/links')
+            link_button = ElementsPage.Links(page)
+            link_button.click_links_buttons('no-content')
+            result = link_button.links_responded()
+            assert result == 'Link has responded with staus 204 and status text No Content'
+
+        def test_moved_link(self, page):
+            page.goto('https://demoqa.com/links')
+            link_button = ElementsPage.Links(page)
+            link_button.click_links_buttons('moved')
+            result = link_button.links_responded()
+            assert result == 'Link has responded with staus 301 and status text Moved Permanently'
+
+        def test_bad_request_link(self, page):
+            page.goto('https://demoqa.com/links')
+            link_button = ElementsPage.Links(page)
+            link_button.click_links_buttons('bad-request')
+            result = link_button.links_responded()
+            assert result == 'Link has responded with staus 400 and status text Bad Request'
+
+        def test_unauthorized_link(self, page):
+            page.goto('https://demoqa.com/links')
+            link_button = ElementsPage.Links(page)
+            link_button.click_links_buttons('unauthorized')
+            result = link_button.links_responded()
+            assert result == 'Link has responded with staus 401 and status text Unauthorized'
+
+        def test_forbidden_link(self, page):
+            page.goto('https://demoqa.com/links')
+            link_button = ElementsPage.Links(page)
+            link_button.click_links_buttons('forbidden')
+            result = link_button.links_responded()
+            assert result == 'Link has responded with staus 403 and status text Forbidden'
+
+        def test_invalid_url_link(self, page):
+            page.goto('https://demoqa.com/links')
+            link_button = ElementsPage.Links(page)
+            link_button.click_links_buttons('invalid-url')
+            result = link_button.links_responded()
+            assert result == 'Link has responded with staus 404 and status text Not Found'
