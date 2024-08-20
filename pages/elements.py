@@ -147,4 +147,22 @@ class ElementsPage:
         def dynamic_click_result(self):
             result = self.page.get_by_text("You have done a dynamic click").inner_text()
             return result
-a
+
+    class Links(BasePage):
+
+        def click_links_buttons(self, choice):
+            choices = {'home': '#simpleLink',
+                       'homedynamic': "#dynamicLink",
+                       'created': "#created",
+                       'no-content': "#no-content",
+                       'moved': "#moved",
+                       'bad-request': "#bad-request",
+                       'unauthorized': "#unauthorized",
+                       'forbidden': "#forbidden",
+                       'invalid-url': "#invalid-url"
+                       }
+            self.page.locator(choices[choice]).click()
+
+        def links_responded(self):
+            result = self.page.get_by_text("Link has responded with staus").inner_text()
+            return result
