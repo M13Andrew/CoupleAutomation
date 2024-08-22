@@ -1,6 +1,7 @@
-from generator.generator import generated_person
+from generator.generator import generated_person, generated_file
 from pages.base_page import BasePage
 import random
+import os
 import time
 
 
@@ -166,3 +167,30 @@ class ElementsPage:
         def links_responded(self):
             result = self.page.get_by_text("Link has responded with staus").inner_text()
             return result
+
+    class UploadAndDownload(BasePage):
+
+        def select_file(self):
+            file_name, path = generated_file()
+            self.page.get_by_label("Select a file").set_input_files(path)
+            os.remove(path)
+            text = self.page.locator('#uploadedFilePath').inner_text()
+            return file_name.split('/')[-1], text.split('\\')[-1]
+
+    class DynamicProperties(BasePage):
+
+        def check_enable_button(self):
+            enable_button = self.page.locator('#enableAfter').is_enabled()
+            return enable_button
+
+        def check_visible_button(self):
+            visible_button = self.page.locator('#visibleAfter').is_visible()
+            return visible_button
+
+        def check_color_button(self):
+            color_button = self.page.locator('#colorChange')
+            previous_color = color_button.evaluate("element => window.getComputedStyle(element).color")
+            time.sleep(6)
+            color_after = color_button.evaluate("element => window.getComputedStyle(element).color")
+            return previous_color, color_after
+

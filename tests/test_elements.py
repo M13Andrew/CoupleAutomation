@@ -121,21 +121,21 @@ class TestElementsPage:
             buttons_page = ElementsPage.Buttons(page)
             buttons_page.double_click()
             result = buttons_page.double_click_result()
-            assert result
+            assert result == 'You have done a double click'
 
         def test_right_click(self, page):
             page.goto('https://demoqa.com/buttons')
             buttons_page = ElementsPage.Buttons(page)
             buttons_page.right_click()
             result = buttons_page.right_click_result()
-            assert result
+            assert result == 'You have done a right click'
 
         def test_dynamic_click(self, page):
             page.goto('https://demoqa.com/buttons')
             buttons_page = ElementsPage.Buttons(page)
             buttons_page.dynamic_click()
             result = buttons_page.dynamic_click_result()
-            assert result
+            assert result == 'You have done a dynamic click', 'test has been fallen'
 
     class TestLinks:
 
@@ -207,3 +207,28 @@ class TestElementsPage:
             link_button.click_links_buttons('invalid-url')
             result = link_button.links_responded()
             assert result == 'Link has responded with staus 404 and status text Not Found'
+
+    class TestUploadAndDownload:
+
+        def test_choose_file(self, page):
+            page.goto('https://demoqa.com/upload-download')
+            choose_file = ElementsPage.UploadAndDownload(page)
+            file_name, result = choose_file.select_file()
+            assert file_name == result
+
+    class TestDynamicProperties:
+
+        def test_enable_buttons(self, page):
+            page.goto('https://demoqa.com/dynamic-properties')
+            dynamic_page = ElementsPage.DynamicProperties(page)
+            time.sleep(6)
+            visible_button = dynamic_page.check_visible_button()
+            enable_button = dynamic_page.check_enable_button()
+            assert enable_button == True
+            assert visible_button == True
+
+        def test_color_button(self, page):
+            page.goto('https://demoqa.com/dynamic-properties')
+            dynamic_page = ElementsPage.DynamicProperties(page)
+            previous_color, color_after = dynamic_page.check_color_button()
+            assert previous_color != color_after
